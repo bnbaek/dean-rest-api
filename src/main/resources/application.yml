@@ -1,0 +1,25 @@
+spring:
+#  application:
+#    name: dean-rest-api
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/restapi
+    username: rest
+    password: api
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        hbm2ddl.auto: update
+        non_contextual_creation: true
+
+server:
+  port: 8082
+
+spring.jpa.show_sql: true
+spring.jpa.properties.hibernate.format_sql: true
+spring.jpa.properties.hibernate.use_sql_comments: true
+logging.level.org.hibernate.type.descriptor.sql: trace
+
