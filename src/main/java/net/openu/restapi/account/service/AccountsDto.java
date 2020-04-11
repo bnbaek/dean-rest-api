@@ -1,10 +1,12 @@
 package net.openu.restapi.account.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.Value;
 import net.openu.restapi.account.repository.Accounts;
 
@@ -14,14 +16,15 @@ import net.openu.restapi.account.repository.Accounts;
  */
 public class AccountsDto {
 
-  @Value
-  public static class Request {
+  @Setter
+  @Getter
+  public static class Create {
 
     private String email;
     private String name;
     private String phoneNumber;
 
-    public Request(String email, String name, String phoneNumber) {
+    public Create(String email, String name, String phoneNumber) {
       this.email = email;
       this.name = name;
       this.phoneNumber = phoneNumber;
@@ -64,8 +67,29 @@ public class AccountsDto {
     }
   }
 
+  @Getter
+  public static class ResponseOne {
+
+    private Response account;
+
+    public ResponseOne(Response account) {
+      this.account = account;
+    }
+  }
+
+  @Getter
+  public static class ResponseList {
+
+    private List<Response> accounts;
+
+    public ResponseList(List<Response> accounts) {
+      this.accounts = accounts;
+    }
+  }
+
   public enum JoinStatus {
     SUCCESS, STAND_BY
   }
+
 
 }

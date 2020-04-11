@@ -3,9 +3,9 @@ Content-Type: application/json;charset=UTF-8
 Accept: application/json;charset=UTF-8
 
 {
-  "email": "kong@openu.net"
-  , "name": "공효진"
-  , "phoneNumber": "01042932223"
+  "email": "irin@openu.net"
+  , "name": "아이린"
+  , "phoneNumber": "01042932225"
 
 }
 
