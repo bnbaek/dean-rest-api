@@ -3,6 +3,21 @@ Content-Type: application/json;charset=UTF-8
 Accept: application/json;charset=UTF-8
 
 {
+  "email": "kong@openu.net"
+  , "name": "공효진"
+  , "phoneNumber": "01042932223"
+
+}
+
+<> 2020-04-11T110634.409.json
+
+###
+
+POST http://localhost:8082/api/v1/accounts
+Content-Type: application/json;charset=UTF-8
+Accept: application/json;charset=UTF-8
+
+{
   "email": "momo@openu.net"
   , "name": "모모"
   , "phoneNumber": "01042932222"
