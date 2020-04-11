@@ -47,4 +47,6 @@ public class ApiException extends RuntimeException {
     this.status = status;
     this.message = message;
   }
+
+
 }

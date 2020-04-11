@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import net.openu.restapi.account.repository.Accounts;
 import net.openu.restapi.account.repository.AccountsRepository;
 import net.openu.restapi.account.service.AccountsDto.Create;
+import net.openu.restapi.account.service.AccountsDto.Response;
 import net.openu.restapi.api.exception.AlreadyExistsException;
+import net.openu.restapi.api.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,5 +45,12 @@ public class AccountsService {
         .collect(Collectors.toList());
 
 
+  }
+
+  public AccountsDto.Response findByUsername(String email) {
+
+    return accountsRepository.findByUsername(email)
+        .map(AccountsDto.Response::of)
+        .orElseThrow(() -> new NotFoundException(email));
   }
 }
