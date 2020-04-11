@@ -3,11 +3,9 @@ package net.openu.restapi.api.account.v1;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import net.openu.restapi.account.repository.Accounts;
 import net.openu.restapi.account.service.AccountsDto.Create;
-import net.openu.restapi.account.service.AccountsDto.Response;
 import net.openu.restapi.account.service.AccountsDto.ResponseOne;
 import net.openu.restapi.account.service.AccountsService;
 import net.openu.restapi.account.service.AccountsDto;
@@ -15,6 +13,7 @@ import net.openu.restapi.api.response.ApiResponseDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,6 +50,14 @@ public class AccountsController {
   public ApiResponseDto<AccountsDto.ResponseOne> account(@ApiParam(value = "회원ID(이메일)", required = true) @PathVariable String email) {
     //TODO 이메일 형식 확인
     return ApiResponseDto.createOK(new ResponseOne(accountsService.findByUsername(email)));
+  }
+
+  @ApiOperation(value = "회원 승인", notes = "관리자가 회원에 상태를 업데이트한다..")
+  @PutMapping("/status/{uuid}")
+  public ApiResponseDto<AccountsDto.ResponseOne> approve(@ApiParam(value = "회원고유 id(uuid)", required = true) @PathVariable String uuid
+      ,@Valid @RequestBody AccountsDto.UpdateStatus updateStatus) {
+    //TODO 이메일 형식 확인
+    return ApiResponseDto.createOK(new ResponseOne(accountsService.updateStatus(uuid,updateStatus)));
   }
 
 

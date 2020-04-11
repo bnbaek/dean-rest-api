@@ -39,8 +39,10 @@ public class ApiCommonAdvice {
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler({NotFoundException.class})
   public ApiResponseDto<String> handleValidException(NotFoundException e) {
-
-    String errorMsg = String.format("리소스를 찾지 못했습니다. - %s", e.getValue());
+    String errorMsg = "리소스를 찾지 못했습니다.";
+    if(e.getValue()==null){
+      errorMsg = String.format("리소스를 찾지 못했습니다. - %s", e.getValue());
+    }
     ApiResponseDto<String> exception = ApiResponseDto.createException(new ApiException(ApiResponseCode.NOT_FOUND, errorMsg));
 
     log.error("[{}] {}", ApiResponseCode.NOT_FOUND.getId(), exception);

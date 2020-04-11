@@ -2,6 +2,9 @@ package net.openu.restapi.account.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -65,6 +68,20 @@ public class AccountsDto {
           .build();
 
     }
+  }
+
+  @Getter
+  @Setter
+  public static class UpdateStatus{
+    @NotNull
+    private AccountsDto.JoinStatus status;
+    @NotEmpty
+    private String orderer;
+
+    public Accounts apply(Accounts account){
+      return account.updateStatus(status);
+    }
+
   }
 
   @Getter

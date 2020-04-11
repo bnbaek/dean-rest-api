@@ -60,4 +60,12 @@ public class Accounts {
     this.createdAt = LocalDateTime.now();
     this.modifiedAt = LocalDateTime.now();
   }
+
+  public Accounts updateStatus(AccountsDto.JoinStatus status){
+    this.status = status;
+    this.modifiedAt = LocalDateTime.now();
+    return this;
+  }
+
+
 }

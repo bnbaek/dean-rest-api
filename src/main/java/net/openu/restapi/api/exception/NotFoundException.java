@@ -11,6 +11,10 @@ public class NotFoundException extends RuntimeException {
 
   private String value;
 
+  public NotFoundException() {
+    super();
+  }
+
   public NotFoundException(String value) {
     this.value = value;
 
