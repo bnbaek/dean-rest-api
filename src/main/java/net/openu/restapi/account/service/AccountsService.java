@@ -22,8 +22,7 @@ public class AccountsService {
   @Transactional
   public AccountsDto.Response signUp(AccountsDto.Request request) {
     Boolean existAccount = accountsRepository.existsByUsername(request.getEmail());
-    //TODO 중복체크
-//    Optional<Accounts> findUsers = accountsRepository.findByUsername(request.getEmail());
+    //중복체크
     if (existAccount) {
       throw new AlreadyExistsException("accounts", "email", request.getEmail());
     }
