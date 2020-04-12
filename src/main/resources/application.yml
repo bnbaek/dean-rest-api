@@ -12,8 +12,10 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
-        hbm2ddl.auto: update
+        hbm2ddl.auto: create
         non_contextual_creation: true
+  jwt:
+    secret: apiserver!@#1
 
 server:
   port: 8082

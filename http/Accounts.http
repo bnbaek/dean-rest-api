@@ -10,3 +10,24 @@ Accept: application/json;charset=UTF-8
 }
 
 ###
+
+GET http://localhost:8082/api/v1/accounts
+Content-Type: application/json;charset=UTF-8
+Accept: application/json;charset=UTF-8
+
+###
+GET http://localhost:8082/api/v1/accounts/momo@openu.net
+Content-Type: application/json;charset=UTF-8
+Accept: application/json;charset=UTF-8
+
+###
+
+PUT http://localhost:8082/api/v1/accounts/26237712A43347C8800D9A951C5F22B4
+Content-Type: application/json;charset=UTF-8
+Accept: application/json;charset=UTF-8
+
+{
+  "orderer": "매니저",
+  "status": "SUCCESS"
+}
+###

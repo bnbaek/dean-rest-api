@@ -2,16 +2,20 @@ package net.openu.restapi.account.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.openu.restapi.account.repository.Accounts;
 import net.openu.restapi.account.repository.AccountsRepository;
 import net.openu.restapi.account.service.AccountsDto.Create;
-import net.openu.restapi.account.service.AccountsDto.Response;
+import net.openu.restapi.account.service.AccountsDto.JoinStatus;
+import net.openu.restapi.account.service.AccountsDto.LoginResponse;
 import net.openu.restapi.account.service.AccountsDto.UpdateStatus;
 import net.openu.restapi.api.exception.AlreadyExistsException;
+import net.openu.restapi.api.exception.EmailSigninFailedException;
 import net.openu.restapi.api.exception.NotFoundException;
+import net.openu.restapi.api.exception.UnauthorizedException;
+import net.openu.restapi.config.security.JwtTokenProvider;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +28,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class AccountsService {
+public class AccountService {
 
   private final AccountsRepository accountsRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final JwtTokenProvider jwtTokenProvider;
 
   @Transactional
   public AccountsDto.Response signUp(Create create) {
@@ -35,16 +41,13 @@ public class AccountsService {
     if (existAccount) {
       throw new AlreadyExistsException("accounts", "email", create.getEmail());
     }
-
-    Accounts savedAccount = accountsRepository.save(create.toEntity());
+    Accounts savedAccount = accountsRepository.save(create.toEntity(passwordEncoder.encode(create.getPassword())));
 
     return AccountsDto.Response.of(savedAccount);
-
 
   }
 
   public List<AccountsDto.Response> findAll() {
-//    List<Accounts> findAllAccounts = accountsRepository.findAll();
     return accountsRepository.findAll().stream()
         .map(AccountsDto.Response::of)
         .collect(Collectors.toList());
@@ -67,5 +70,20 @@ public class AccountsService {
         .orElseThrow(NotFoundException::new);
 
     return AccountsDto.Response.of(updatedStatus);
+  }
+
+  public LoginResponse signIn(AccountsDto.Login login) {
+    Accounts accounts = accountsRepository.findByUsername(login.getEmail()).orElseThrow(EmailSigninFailedException::new);
+
+    if (accounts.getStatus() == JoinStatus.STAND_BY) {
+      //관리자 승인 대기중 UNAUTHORIZED
+      throw new UnauthorizedException("해당 계정은 관리자 승인 대기중 입니다.");
+    }
+
+    if (!passwordEncoder.matches(login.getPassword(), accounts.getPassword())) {
+      throw new EmailSigninFailedException();
+    }
+
+    return new LoginResponse(login.getEmail(), jwtTokenProvider.createToken(accounts.getUuid(), accounts.getRoles()));
   }
 }

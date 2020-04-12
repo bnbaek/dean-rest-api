@@ -1,6 +1,6 @@
 package net.openu.restapi.account.service;
 
-import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Value;
 import net.openu.restapi.account.repository.Accounts;
 
 /**
@@ -19,28 +18,62 @@ import net.openu.restapi.account.repository.Accounts;
  */
 public class AccountsDto {
 
-  @Setter
   @Getter
+  @Setter
   public static class Create {
 
+    @NotBlank
     private String email;
+    @NotBlank
+    private String password;
+    @NotBlank
     private String name;
+    @NotBlank
     private String phoneNumber;
 
-    public Create(String email, String name, String phoneNumber) {
+    public Create(String email, String name, String phoneNumber, String password) {
       this.email = email;
       this.name = name;
       this.phoneNumber = phoneNumber;
+      this.password = password;
     }
 
-    public Accounts toEntity() {
+    public Accounts toEntity(String password) {
       return Accounts.builder()
           .name(name)
           .username(email)
           .phoneNumber(phoneNumber)
+          .password(password)
+          .roles(Collections.singletonList("ROLE_USER"))
           .build();
     }
   }
+
+  @Getter
+  @Setter
+  public static class Login {
+
+    @NotBlank
+    private String email;
+    @NotBlank
+    private String password;
+
+  }
+
+
+  @Getter
+  public static class LoginResponse {
+
+    private String email;
+    private String accessToken;
+
+
+    public LoginResponse(String email, String accessToken) {
+      this.email = email;
+      this.accessToken = accessToken;
+    }
+  }
+
 
   @Getter
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -72,13 +105,14 @@ public class AccountsDto {
 
   @Getter
   @Setter
-  public static class UpdateStatus{
+  public static class UpdateStatus {
+
     @NotNull
     private AccountsDto.JoinStatus status;
     @NotEmpty
     private String orderer;
 
-    public Accounts apply(Accounts account){
+    public Accounts apply(Accounts account) {
       return account.updateStatus(status);
     }
 

@@ -1,8 +1,12 @@
 package net.openu.restapi.api.advice;
 
+import static jdk.nashorn.internal.runtime.ECMAErrors.getMessage;
+
+import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import net.openu.restapi.api.exception.AlreadyExistsException;
 import net.openu.restapi.api.exception.ApiException;
+import net.openu.restapi.api.exception.EmailSigninFailedException;
 import net.openu.restapi.api.exception.NotFoundException;
 import net.openu.restapi.api.response.ApiResponseCode;
 import net.openu.restapi.api.response.ApiResponseDto;
@@ -37,10 +41,10 @@ public class ApiCommonAdvice {
    * 데이터를 찾지 못함 400
    */
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  @ExceptionHandler({NotFoundException.class})
+  @ExceptionHandler(value = {NotFoundException.class})
   public ApiResponseDto<String> handleValidException(NotFoundException e) {
     String errorMsg = "리소스를 찾지 못했습니다.";
-    if(e.getValue()==null){
+    if (e.getValue() == null) {
       errorMsg = String.format("리소스를 찾지 못했습니다. - %s", e.getValue());
     }
     ApiResponseDto<String> exception = ApiResponseDto.createException(new ApiException(ApiResponseCode.NOT_FOUND, errorMsg));
@@ -49,5 +53,21 @@ public class ApiCommonAdvice {
     return exception;
   }
 
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  @ExceptionHandler(value = {EmailSigninFailedException.class})
+  public ApiResponseDto<String> handleValidException(EmailSigninFailedException e) {
+    ApiResponseDto<String> exception = ApiResponseDto.createException(new ApiException(ApiResponseCode.UNAUTHORIZED, e.getMessage()));
+    log.error("[{}] {}", ApiResponseCode.SERVER_ERROR.getId(), exception);
+    return exception;
+  }
 
+
+  @ExceptionHandler(Exception.class)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public ApiResponseDto<String> defaultException(HttpServletRequest request, Exception e) {
+    ApiResponseDto<String> exception = ApiResponseDto.createError(new ApiException(ApiResponseCode.SERVER_ERROR, e.getMessage()));
+    log.error("[{}] {}", ApiResponseCode.SERVER_ERROR.getId(), exception);
+    return exception;
+  }
 }
+
