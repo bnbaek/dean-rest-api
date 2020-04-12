@@ -62,6 +62,7 @@ public class AccountService {
         .orElseThrow(() -> new NotFoundException(email));
   }
 
+  @Transactional
   public AccountsDto.Response updateStatus(String uuid, UpdateStatus updateStatus) {
     log.info("{}에 의해 {}의 상태{}로 업데이트를 시도했다", updateStatus.getOrderer(), uuid, updateStatus.getStatus());
 

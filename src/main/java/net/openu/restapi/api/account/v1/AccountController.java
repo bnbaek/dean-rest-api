@@ -1,5 +1,6 @@
 package net.openu.restapi.api.account.v1;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import javax.validation.Valid;
@@ -21,6 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by iopenu@gmail.com on 2020/04/13
  * Github : https://github.com/bnbaek
  */
+
+@Api(tags = {"1. Accounts"})
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = {"/api/v1", "/api"})

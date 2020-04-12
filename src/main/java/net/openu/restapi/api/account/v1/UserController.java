@@ -1,6 +1,8 @@
 package net.openu.restapi.api.account.v1;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Github : https://github.com/bnbaek
  */
 
-@Api(tags = {"1. Users"})
+@Api(tags = {"2. Users"})
 
 @RestController
 @RequiredArgsConstructor
@@ -33,13 +35,15 @@ public class UserController {
     return ApiResponseDto.createOK(new AccountsDto.ResponseList(accountService.findAll()));
   }
 
+  @ApiImplicitParams(value = {
+      @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+  })
   @ApiOperation(value = "회원 단건 조회", notes = "회원을 조회한다")
   @GetMapping("{email}")
   public ApiResponseDto<AccountsDto.ResponseOne> account(@ApiParam(value = "회원ID(이메일)", required = true) @PathVariable String email) {
     //TODO 이메일 형식 확인
     return ApiResponseDto.createOK(new ResponseOne(accountService.findByUsername(email)));
   }
-
 
 
 }
