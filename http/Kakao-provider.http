@@ -1,0 +1,11 @@
+
+#GET /oauth/authorize?client_id=77c951fb22608c2482b53e2ae12798b3&redirect_uri=http://localhost:8082/api/v1/oauth/kakao&response_type=code
+GET  /oauth/authorize?client_id=0d4ddb902bce4eecd3d72c0d664346bc&response_type=code&redirect_uri=http://localhost:8082/api/v1/oauth/kakao
+#GET  /oauth/authorize?client_id=0d4ddb902bce4eecd3d72c0d664346bc&redirect_uri=http://localhost:8082/api/v1/oauth/kakao&response_type=code
+Host: https://kauth.kakao.com
+
+###
+
+GET localhost:8082/api/v1/oauth/kakao?code=111
+
+###

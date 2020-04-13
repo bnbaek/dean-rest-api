@@ -5,17 +5,20 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.openu.restapi.account.service.AccountsDto;
 import net.openu.restapi.account.service.AccountsDto.Create;
 import net.openu.restapi.account.service.AccountsDto.Login;
 import net.openu.restapi.account.service.AccountsDto.ResponseOne;
 import net.openu.restapi.account.service.AccountService;
 import net.openu.restapi.api.response.ApiResponseDto;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -24,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @Api(tags = {"1. Accounts"})
-
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = {"/api/v1", "/api"})
@@ -51,6 +54,13 @@ public class AccountController {
       , @Valid @RequestBody AccountsDto.UpdateStatus updateStatus) {
     //TODO 이메일 형식 확인
     return ApiResponseDto.createOK(new ResponseOne(accountService.updateStatus(uuid, updateStatus)));
+  }
+
+
+  @GetMapping("/oauth/kakao")
+  public String kakao(@RequestParam String code) {
+    log.info("code {}",code);
+    return code;
   }
 
 }

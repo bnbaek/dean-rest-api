@@ -1,6 +1,6 @@
 spring:
-#  application:
-#    name: dean-rest-api
+  #  application:
+  #    name: dean-rest-api
 
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -17,6 +17,20 @@ spring:
   jwt:
     secret: apiserver!@#1
 
+  social:
+    kakao:
+      client_id: 0d4ddb902bce4eecd3d72c0d664346bc # 앱생성시 받은 REST API 키
+      redirect: /api/v1/oauth/kakao
+      url:
+        login: https://kauth.kakao.com/oauth/authorize
+        token: https://kauth.kakao.com/oauth/token
+        profile: https://kapi.kakao.com/v2/user/me
+  url:
+    base: http://localhost:8082
+
+
+  freemarker:
+    enabled: true
 server:
   port: 8082
 

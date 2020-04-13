@@ -1,3 +1,70 @@
+GET https://kauth.kakao.com/oauth/authorize?client_id=77c951fb22608c2482b53e2ae12798b3&redirect_uri=http://localhost:8082/api/v1/kakao&response_type=code
+Host: https://kauth.kakao.com
+
+###
+
+GET https://kauth.kakao.com/oauth/authorize?client_id=0d4ddb902bce4eecd3d72c0d664346bc&redirect_uri=http://localhost:8082/api/v1/kakao&response_type=code
+Host: https://kauth.kakao.com
+
+###
+
+GET https://kauth.kakao.com/oauth/authorize?client_id=0d4ddb902bce4eecd3d72c0d664346bc&redirect_uri=http://localhost:8082/api/v1/kakao&response_type=code
+Host: https://kauth.kakao.com
+
+###
+
+GET https://kauth.kakao.com/oauth/authorize?client_id=0d4ddb902bce4eecd3d72c0d664346bc&redirect_uri=http://localhost:8082/api/v1/kakao&response_type=code
+Host: https://kauth.kakao.com
+
+###
+
+GET http://localhost:8082/api/v1/kakao?code=111
+
+<> 2020-04-13T053457.200.txt
+
+###
+
+GET http://localhost:8082/api/v1/kakao?code=111
+
+<> 2020-04-13T053339.403.json
+
+###
+
+GET http://localhost:8082/api/v1/kakao?code=111
+
+###
+
+GET http://localhost:8082/api/v1/kakao?code=111
+
+<> 2020-04-13T053313.403.json
+
+###
+
+GET https://kauth.kakao.com/oauth/authorize?client_id=0d4ddb902bce4eecd3d72c0d664346bc&redirect_uri=http://localhost:8082/api/v1/kakao&response_type=code
+Host: https://kauth.kakao.com
+
+###
+
+GET http://kauth.kakao.com:443/oauth/authorize?client_id=0d4ddb902bce4eecd3d72c0d664346bc&redirect_uri=http://localhost:8082/api/v1/kakao&response_type=code
+Host: kauth.kakao.com:443
+
+###
+
+GET http://kauth.kakao.com:443/oauth/authorize?client_id=0d4ddb902bce4eecd3d72c0d664346bc&redirect_uri=http://localhost:8082/api/v1/kakao&response_type=code
+Host: kauth.kakao.com:443
+
+###
+
+GET http://kauth.kakao.com/oauth/authorize?client_id=0d4ddb902bce4eecd3d72c0d664346bc&redirect_uri=http://localhost:8082/api/v1/kakao&response_type=code
+Host: kauth.kakao.com
+
+###
+
+GET http://kauth.kakao.com/oauth/authorize?client_id=0d4ddb902bce4eecd3d72c0d664346bc&redirect_uri=https://localhost:8082/api/v1/kakao&response_type=code
+Host: kauth.kakao.com
+
+###
+
 GET http://localhost:8082/api/v1/accounts/momo@openu.net
 Content-Type: application/json;charset=UTF-8
 Accept: application/json;charset=UTF-8
