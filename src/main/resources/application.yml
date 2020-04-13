@@ -19,8 +19,8 @@ spring:
 
   social:
     kakao:
-      client_id: 0d4ddb902bce4eecd3d72c0d664346bc # 앱생성시 받은 REST API 키
-      redirect: /api/v1/oauth/kakao
+      client_id: 42d5ee91d970d405f507e1d2a6ca457f # 앱생성시 받은 REST API 키
+      redirect: /social/login/kakao/code
       url:
         login: https://kauth.kakao.com/oauth/authorize
         token: https://kauth.kakao.com/oauth/token

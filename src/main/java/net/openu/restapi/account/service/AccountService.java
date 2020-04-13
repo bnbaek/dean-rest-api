@@ -8,8 +8,12 @@ import net.openu.restapi.account.repository.Accounts;
 import net.openu.restapi.account.repository.AccountsRepository;
 import net.openu.restapi.account.service.AccountsDto.Create;
 import net.openu.restapi.account.service.AccountsDto.JoinStatus;
+import net.openu.restapi.account.service.AccountsDto.KaKaoLogin;
 import net.openu.restapi.account.service.AccountsDto.LoginResponse;
+import net.openu.restapi.account.service.AccountsDto.InterLock;
+import net.openu.restapi.account.service.AccountsDto.Response;
 import net.openu.restapi.account.service.AccountsDto.UpdateStatus;
+import net.openu.restapi.account.service.KakaoDto.KakaoProfile;
 import net.openu.restapi.api.exception.AlreadyExistsException;
 import net.openu.restapi.api.exception.EmailSigninFailedException;
 import net.openu.restapi.api.exception.NotFoundException;
@@ -31,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AccountService {
 
   private final AccountsRepository accountsRepository;
+  private final KakaoService kakaoService;
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenProvider jwtTokenProvider;
 
@@ -86,5 +91,36 @@ public class AccountService {
     }
 
     return new LoginResponse(login.getEmail(), jwtTokenProvider.createToken(accounts.getUuid(), accounts.getRoles()));
+  }
+
+  @Transactional
+  public AccountsDto.Response kakaoInterLock(String uuid, String kakaoAccessToken) {
+    log.info("{}의 카카오로 연동을(를) 시도했다", uuid, kakaoAccessToken);
+
+    KakaoProfile kakaoProfile = kakaoService.getKakaoProfile(kakaoAccessToken);
+    if (kakaoProfile.getId() == null) {
+      throw new RuntimeException("카카오에 연동정보가 존재하지 않는다");
+    }
+    InterLock interLock = kakaoProfile.toEntity();
+
+    Accounts updatedProvider = accountsRepository.findByUuid(uuid)
+        .map(interLock::apply)
+        .orElseThrow(NotFoundException::new);
+    return AccountsDto.Response.of(updatedProvider);
+
+
+  }
+
+  public LoginResponse kakaoSignIn(KaKaoLogin kaKaoLogin) {
+    KakaoProfile kakaoProfile = kakaoService.getKakaoProfile(kaKaoLogin.getAccessToken());
+    if (kakaoProfile.getId() == null) {
+      throw new RuntimeException("카카오에 연동정보가 존재하지 않는다");
+    }
+    InterLock interLock = kakaoProfile.toEntity();
+
+    Accounts accounts = accountsRepository.findByProviderAndProviderId(interLock.getProvider(), interLock.getProviderId())
+        .orElseThrow(EmailSigninFailedException::new);
+
+    return new LoginResponse(accounts.getUsername(), jwtTokenProvider.createToken(accounts.getUuid(), accounts.getRoles()));
   }
 }

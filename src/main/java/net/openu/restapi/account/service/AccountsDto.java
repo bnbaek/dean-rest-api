@@ -60,6 +60,16 @@ public class AccountsDto {
 
   }
 
+  @Getter
+  @Setter
+  public static class KaKaoLogin {
+
+    @NotBlank
+    private String accessToken;
+
+  }
+
+
 
   @Getter
   public static class LoginResponse {
@@ -114,6 +124,23 @@ public class AccountsDto {
 
     public Accounts apply(Accounts account) {
       return account.updateStatus(status);
+    }
+
+  }
+
+  @Getter
+  public static class InterLock {
+
+    private String provider;
+    private Long providerId;
+
+    public Accounts apply(Accounts account){
+      return account.updateProvider(provider,providerId);
+    }
+
+    public InterLock(String provider, Long providerId) {
+      this.provider = provider;
+      this.providerId = providerId;
     }
 
   }

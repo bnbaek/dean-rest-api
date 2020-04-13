@@ -60,6 +60,11 @@ public class Accounts implements UserDetails {
 
   private String phoneNumber;
 
+  @Column(length = 100)
+  private String provider;
+  @Column(length = 100)
+  private Long providerId;
+
   @Enumerated(EnumType.STRING)
   private AccountsDto.JoinStatus status;
   private LocalDateTime createdAt;
@@ -71,7 +76,7 @@ public class Accounts implements UserDetails {
 
 
   @Builder
-  public Accounts(String username, String password, String name, String phoneNumber,List<String> roles) {
+  public Accounts(String username, String password, String name, String phoneNumber, List<String> roles) {
     this.username = username;
     this.password = password;
     this.name = name;
@@ -86,6 +91,12 @@ public class Accounts implements UserDetails {
   public Accounts updateStatus(AccountsDto.JoinStatus status) {
     this.status = status;
     this.modifiedAt = LocalDateTime.now();
+    return this;
+  }
+
+  public Accounts updateProvider(String provider, Long providerId) {
+    this.provider = provider;
+    this.providerId = providerId;
     return this;
   }
 

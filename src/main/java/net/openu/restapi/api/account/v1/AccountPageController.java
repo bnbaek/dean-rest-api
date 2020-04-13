@@ -1,11 +1,13 @@
 package net.openu.restapi.api.account.v1;
 
 import lombok.RequiredArgsConstructor;
+import net.openu.restapi.account.service.KakaoService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -19,7 +21,10 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/social/login/kakao")
 public class AccountPageController {
+
   private final Environment env;
+  private final KakaoService kakaoService;
+
 
   @Value("${spring.url.base}")
   private String baseUrl;
@@ -45,6 +50,17 @@ public class AccountPageController {
 
     mav.addObject("loginUrl", loginUrl);
     mav.setViewName("social/login");
+    return mav;
+  }
+
+
+  /**
+   * 카카오 인증 완료 후 리다이렉트 화면
+   */
+  @GetMapping(value = "/code")
+  public ModelAndView redirectKakao(ModelAndView mav, @RequestParam String code) {
+    mav.addObject("authInfo", kakaoService.getKakaoTokenInfo(code).toString());
+    mav.setViewName("social/redirectKakao");
     return mav;
   }
 

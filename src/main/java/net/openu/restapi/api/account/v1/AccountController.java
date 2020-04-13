@@ -7,10 +7,13 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.openu.restapi.account.service.AccountsDto;
-import net.openu.restapi.account.service.AccountsDto.Create;
-import net.openu.restapi.account.service.AccountsDto.Login;
+import net.openu.restapi.account.service.AccountsDto.Response;
 import net.openu.restapi.account.service.AccountsDto.ResponseOne;
 import net.openu.restapi.account.service.AccountService;
+import net.openu.restapi.account.service.AccountsDto.InterLock;
+import net.openu.restapi.account.service.KakaoDto;
+import net.openu.restapi.account.service.KakaoDto.KakaoProfile;
+import net.openu.restapi.account.service.KakaoService;
 import net.openu.restapi.api.response.ApiResponseDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountController {
 
   private final AccountService accountService;
+  private final KakaoService kakaoService;
 
   @ApiOperation(value = "회원 가입", notes = "회원을 가입한다.")
   @PostMapping("register")
@@ -41,11 +45,18 @@ public class AccountController {
     return ApiResponseDto.createOK(new AccountsDto.ResponseOne(accountService.signUp(create)));
   }
 
-  @ApiOperation(value = "회원 로그인", notes = "회원을 가입한다.")
+  @ApiOperation(value = "회원 로그인", notes = "회원을 로그인한다.")
   @PostMapping("login")
   public ApiResponseDto<AccountsDto.LoginResponse> signIn(@RequestBody AccountsDto.Login login) {
     return ApiResponseDto.createOK(accountService.signIn(login));
   }
+
+  @ApiOperation(value = "카카오 로그인", notes = "카카오로 로그인을 한다.")
+  @PostMapping("kakao/login")
+  public ApiResponseDto<AccountsDto.LoginResponse> kakaoSignIn(@Valid @RequestBody AccountsDto.KaKaoLogin kaKaoLogin) {
+    return ApiResponseDto.createOK(accountService.kakaoSignIn(kaKaoLogin));
+  }
+
 
   //추후  manager
   @ApiOperation(value = "회원 승인", notes = "관리자가 회원에 상태를 업데이트한다..")
@@ -57,9 +68,19 @@ public class AccountController {
   }
 
 
+  @ApiOperation(value = "회원카카오연동", notes = "키카오연동을 한다.")
+  @PutMapping("kakao/interlock/{uuid}")
+  public ApiResponseDto<AccountsDto.ResponseOne> kakaoInterLock(
+      @ApiParam(value = "회원고유 id(uuid)", required = true) @PathVariable String uuid
+      , @RequestParam String kakaoAccessToken) {
+    Response response = accountService.kakaoInterLock(uuid, kakaoAccessToken);
+
+    return ApiResponseDto.createOK(new ResponseOne(response));
+  }
+
   @GetMapping("/oauth/kakao")
   public String kakao(@RequestParam String code) {
-    log.info("code {}",code);
+    log.info("code {}", code);
     return code;
   }
 
