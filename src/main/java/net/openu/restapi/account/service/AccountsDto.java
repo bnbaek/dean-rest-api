@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import net.openu.restapi.account.repository.Accounts;
 
 /**
@@ -87,6 +88,7 @@ public class AccountsDto {
 
   @Getter
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
+  @ToString
   public static class Response {
 
     private String uuid;

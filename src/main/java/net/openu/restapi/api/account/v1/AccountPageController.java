@@ -1,6 +1,10 @@
 package net.openu.restapi.api.account.v1;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.openu.restapi.account.service.AccountService;
+import net.openu.restapi.account.service.AccountsDto.Response;
+import net.openu.restapi.account.service.KakaoDto.KakaoAuth;
 import net.openu.restapi.account.service.KakaoService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -17,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
  * Date: 2020/04/13
  * Time: 6:02 오후
  */
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/social/login/kakao")
@@ -24,6 +29,7 @@ public class AccountPageController {
 
   private final Environment env;
   private final KakaoService kakaoService;
+  private final AccountService accountService;
 
 
   @Value("${spring.url.base}")
@@ -37,19 +43,20 @@ public class AccountPageController {
 
 
   /**
-   * 카카오 로그인 페이지
+   * 카카오 연 페이지
    */
-  @GetMapping
-  public ModelAndView socialLogin(ModelAndView mav) {
+  @GetMapping(value = "/interlock")
+  public ModelAndView socialLogin(ModelAndView mav,@RequestParam String uuid) {
 
     StringBuilder loginUrl = new StringBuilder()
         .append(env.getProperty("spring.social.kakao.url.login"))
         .append("?client_id=").append(kakaoClientId)
         .append("&response_type=code")
+        .append("&state=interlock_"+uuid)
         .append("&redirect_uri=").append(baseUrl).append(kakaoRedirect);
 
     mav.addObject("loginUrl", loginUrl);
-    mav.setViewName("social/login");
+    mav.setViewName("social/interlock");
     return mav;
   }
 
@@ -58,8 +65,22 @@ public class AccountPageController {
    * 카카오 인증 완료 후 리다이렉트 화면
    */
   @GetMapping(value = "/code")
-  public ModelAndView redirectKakao(ModelAndView mav, @RequestParam String code) {
-    mav.addObject("authInfo", kakaoService.getKakaoTokenInfo(code).toString());
+  public ModelAndView redirectKakao(ModelAndView mav, @RequestParam String code, @RequestParam String state) {
+
+    KakaoAuth kakaoTokenInfo = kakaoService.getKakaoTokenInfo(code,state);
+
+    if(kakaoTokenInfo==null){
+      log.error("연동에 실패하였습니다");
+      throw new RuntimeException("연동에 실패하였습니다.");
+    }
+
+    if(state.startsWith("interlock_")){
+      Response response = accountService.kakaoInterLock(state.replace("interlock_", ""), kakaoTokenInfo.getAccess_token());
+      mav.addObject("authInfo", response.toString());
+    }
+
+
+
     mav.setViewName("social/redirectKakao");
     return mav;
   }
