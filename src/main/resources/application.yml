@@ -1,6 +1,6 @@
 spring:
-#  application:
-#    name: dean-rest-api
+  application:
+    name: dean-rest-api
 
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -12,11 +12,37 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
-        hbm2ddl.auto: update
+        hbm2ddl.auto: create-drop
         non_contextual_creation: true
+  jwt:
+    secret: apiserver!@#1
 
+  social:
+    kakao:
+      client_id: 42d5ee91d970d405f507e1d2a6ca457f # 앱생성시 받은 REST API 키
+      redirect: /social/login/kakao/code
+      url:
+        login: https://kauth.kakao.com/oauth/authorize
+        token: https://kauth.kakao.com/oauth/token
+        profile: https://kapi.kakao.com/v2/user/me
+  url:
+    base: http://localhost:8083
+
+
+  redis:
+    host: localhost
+    port: 6379
+  session:
+    timeout: 600
+    store-type: redis
+    redis:
+      flush-mode: on_save
+      namespace: spring:session
+
+  freemarker:
+    enabled: true
 server:
-  port: 8082
+  port: 8083
 
 spring.jpa.show_sql: true
 spring.jpa.properties.hibernate.format_sql: true

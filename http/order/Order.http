@@ -1,0 +1,11 @@
+POST http://localhost:8083/orders
+Content-Type: application/json;charset=UTF-8
+Accept: application/json;charset=UTF-8
+
+{
+  "mallOrderId": "order001",
+  "address": {
+    "zipCode": "4321",
+    "recipient": "서울시 강남"
+  }
+}
