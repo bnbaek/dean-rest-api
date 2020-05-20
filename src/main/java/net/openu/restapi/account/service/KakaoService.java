@@ -34,7 +34,7 @@ public class KakaoService {
   private String kakaoRedirect;
 
 
-  public KakaoDto.KakaoAuth getKakaoTokenInfo(String code,String state) {
+  public KakaoDto.KakaoAuth getKakaoTokenInfo(String code) {
     // Set header : Content-type: application/x-www-form-urlencoded
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);

@@ -6,13 +6,7 @@
 
 </head>
 <body>
-
-<#if interLockInfo??>
-    ${interLockInfo}
-</#if>
-<#if authInfo??>
-    ${authInfo}
-</#if>
+${authInfo}
 
 
 </body>

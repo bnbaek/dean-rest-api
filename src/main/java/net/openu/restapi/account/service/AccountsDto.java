@@ -68,10 +68,14 @@ public class AccountsDto {
     @NotBlank
     private String accessToken;
 
+    public KaKaoLogin(@NotBlank String accessToken) {
+      this.accessToken = accessToken;
+    }
   }
 
 
 
+  @ToString
   @Getter
   public static class LoginResponse {
 

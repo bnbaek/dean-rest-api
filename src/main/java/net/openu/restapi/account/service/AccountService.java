@@ -111,7 +111,7 @@ public class AccountService {
 
   }
 
-  public LoginResponse kakaoSignIn(KaKaoLogin kaKaoLogin) {
+  public LoginResponse kakaoLogin(KaKaoLogin kaKaoLogin) {
     KakaoProfile kakaoProfile = kakaoService.getKakaoProfile(kaKaoLogin.getAccessToken());
     if (kakaoProfile.getId() == null) {
       throw new RuntimeException("카카오에 연동정보가 존재하지 않는다");

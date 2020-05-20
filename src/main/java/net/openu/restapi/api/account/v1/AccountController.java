@@ -10,9 +10,6 @@ import net.openu.restapi.account.service.AccountsDto;
 import net.openu.restapi.account.service.AccountsDto.Response;
 import net.openu.restapi.account.service.AccountsDto.ResponseOne;
 import net.openu.restapi.account.service.AccountService;
-import net.openu.restapi.account.service.AccountsDto.InterLock;
-import net.openu.restapi.account.service.KakaoDto;
-import net.openu.restapi.account.service.KakaoDto.KakaoProfile;
 import net.openu.restapi.account.service.KakaoService;
 import net.openu.restapi.api.response.ApiResponseDto;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,7 +51,7 @@ public class AccountController {
   @ApiOperation(value = "카카오 로그인", notes = "카카오로 로그인을 한다.")
   @PostMapping("kakao/login")
   public ApiResponseDto<AccountsDto.LoginResponse> kakaoSignIn(@Valid @RequestBody AccountsDto.KaKaoLogin kaKaoLogin) {
-    return ApiResponseDto.createOK(accountService.kakaoSignIn(kaKaoLogin));
+    return ApiResponseDto.createOK(accountService.kakaoLogin(kaKaoLogin));
   }
 
 
